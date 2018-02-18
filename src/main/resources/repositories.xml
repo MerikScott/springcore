@@ -4,8 +4,48 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="messageRepository"
-          class="pl.waterborn.messagesender.repository.inmemory.InMemoryMessageRepository">
+    <bean id="message1" class="pl.waterborn.messagesender.domain.Message">
+        <constructor-arg name="subject" value="1234"/>
+        <constructor-arg name="body" value="1234body"/>
+    </bean>
+
+    <bean id="message2" class="pl.waterborn.messagesender.domain.Message">
+        <constructor-arg name="subject" value="2345"/>
+        <constructor-arg name="body" value="2345body"/>
+    </bean>
+
+    <bean id="message3" class="pl.waterborn.messagesender.domain.Message">
+        <constructor-arg name="subject" value="3456"/>
+        <constructor-arg name="body" value="3456body"/>
+    </bean>
+
+    <bean id="messageFactory" class="pl.waterborn.messagesender.domain.MyMessageFactory"/>
+
+    <bean id="messageDto1" class="pl.waterborn.messagesender.service.MessageDto">
+        <property name="body" value="nice body"/>
+        <property name="subject" value="hot subject"/>
+    </bean>
+
+    <bean id="messageRepository" class="pl.waterborn.messagesender.repository.inmemory.InMemoryMessageRepository">
+        <constructor-arg>
+            <list>
+                <ref bean="message1"/>
+                <ref bean="message2"/>
+                <ref bean="message3"/>
+
+                <bean factory-bean="messageFactory" factory-method="createFrom">
+                    <constructor-arg>
+                        <bean class="pl.waterborn.messagesender.service.MessageDto">
+                            <property name="body" value="nice body"/>
+                            <property name="subject" value="hot subject"/>
+                        </bean>
+                    </constructor-arg>
+                </bean>
+                <bean factory-bean="messageFactory" factory-method="createFrom">
+                    <constructor-arg ref="messageDto1"/>
+                </bean>
+            </list>
+        </constructor-arg>
     </bean>
 
 </beans>

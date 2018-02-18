@@ -6,8 +6,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import pl.waterborn.messagesender.domain.Message;
 import pl.waterborn.messagesender.domain.MessageRepository;
+import pl.waterborn.messagesender.domain.MyMessageFactory;
 
 import static org.hamcrest.CoreMatchers.any;
 
@@ -46,12 +46,7 @@ public class MessageCrudTest {
         messageDto.setFrom(FROM);
         messageDto.setTo(TO);
 
-        messageRepository.add(new Message.MessageBuilder()
-                .withBody(BODY)
-                .withSubject(SUBJECT)
-                .withFrom(FROM)
-                .withTo(TO)
-                .build());
+        messageRepository.add(new MyMessageFactory().createFrom(messageDto));
 
         Response response = messageCrud.createNew(messageDto);
 

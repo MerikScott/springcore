@@ -1,25 +1,28 @@
 package pl.waterborn.messagesender.domain;
+
 import org.junit.Assert;
 import org.junit.Test;
+import pl.waterborn.messagesender.service.MessageDto;
 
 public class MessageTest {
+    public static final String BODY = "body";
+    public static final String SUBJECT = "subject";
+    public static final String FROM = "from";
+    public static final String TO = "to";
     @Test
     public void shouldCreateMessageWithRequiredFields() {
-        String sentTo = "to";
-        String sentFrom = "from";
-        String body = "body";
-        String subject = "subject";
 
-        Message message = new Message.MessageBuilder()
-                .withSubject(subject)
-                .withBody(body)
-                .withFrom(sentFrom)
-                .withTo(sentTo)
-                .build();
+        MessageDto messageDto = new MessageDto();
+        messageDto.setSubject(SUBJECT);
+        messageDto.setBody(BODY);
+        messageDto.setFrom(FROM);
+        messageDto.setTo(TO);
 
-        Assert.assertEquals(subject, message.getSubject());
-        Assert.assertEquals(body, message.getBody());
-        Assert.assertEquals(sentFrom, message.getFrom());
-        Assert.assertEquals(sentTo, message.getTo());
+        Message message = new MyMessageFactory().createFrom(messageDto);
+
+        Assert.assertEquals(SUBJECT, message.getSubject());
+        Assert.assertEquals(BODY, message.getBody());
+        Assert.assertEquals(FROM, message.getFrom());
+        Assert.assertEquals(TO, message.getTo());
     }
 }
